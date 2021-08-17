@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}
+	Categories
+{% endblock %}}
+{% block content %}
+
+
+<h1><u> Blog Categories</u> : </h1><br/><br/>
+
+	{% for item in cat_menu_list %}    	 
+    	<div class="d-grid gap-2 col-4 mx-auto">
+  			<a class="btn btn-outline-dark" type="button" href="{% url 'category' item|slugify %}">{{ item }}</a><br/>  			
+  		</div>
+	{% endfor %} 
+
+{% endblock %}

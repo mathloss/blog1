@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+	{{ post.title_tag }}
+{% endblock %}}
+{% block content %}
+
+
+<h1> {{ post.title }}</h1>
+<small>By : {{ post.author }} - {{ post.post_date }}
+{% if user.is_authenticated %}
+	{% if user.id == post.author.id %}
+		 - <a href="{% url 'update_post' post.pk %}" class="btn btn-outline-primary btn-sm">Edit</a> - <a href="{% url 'delete_post' post.pk %}" class="btn btn-outline-danger btn-sm">Delete</a></small><br/>
+	{% endif %}
+{% endif %}
+<hr>
+<br/>
+
+{% if post.header_image %}
+	<img src="{{ post.header_image.url }}"><br/><br/>
+{% endif %}
+{{ post.body| safe }}
+
+<br/><br/>
+<br/>
+
+<form action="{% url 'like_post' post.pk %}" method="POST">
+	{% csrf_token %}
+
+	{% if user.is_authenticated %}
+
+		{% if liked %}
+			<button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-dark btn-sm">Unlike</button> - <small>{{ total_likes }} Likes</small>
+		{% else %}
+			<button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-primary btn-sm">Like</button> - <small>{{ total_likes }} Likes</small>
+		{% endif %}
+	
+	{% endif %}
+</form>
+
+<br/><br/>
+
+<div class="card mb-3" style="max-width: 540px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+
+    </div>
+    <div >
+      <div class="card-body">
+        <h5 class="card-title">{{ post.author.first_name}} {{ post.author.last_name}}</h5>
+        <p class="small text-muted">
+
+        	{% if post.author.profile.website_url %}
+        		<a href="{{ post.author.profile.website_url }}" target="_blank">Website</a>
+        	{% endif %}        	
+
+        	{% if post.author.profile.facebook_url %}
+        		<a href="{{ post.author.profile.facebook_url }}" target="_blank">Website</a>
+        	{% endif %}
+
+        	{% if post.author.profile.twitter_url %}
+        		<a href="{{ post.author.profile.twitter_url }}"target="_blank">Website</a>
+        	{% endif %}
+        
+
+        <p class="card-text">{{ post.author.profile.bio }}</p>        
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <img src="{{ post.author.profile.profile_pic.url }}" width=150 heigth=150 class="rounded-circle">
+-->
+
+<br/><br/><br/><br/><br/>
+
+<a href="{% url 'home' %}" class="btn btn-outline-dark">BACK</a>
+
+<br/><br/><br/><br/><br/>
+
+{% endblock %}
